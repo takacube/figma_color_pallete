@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Color Component Creator</title>
+</head>
+<body>
+  <div>
+    <label for="color">Enter HEX Color:</label>
+    <input type="text" id="color" placeholder="#000000" />
+    <button id="create">Create Component</button>
+  </div>
+
+  <script>
+    document.getElementById('create').onclick = () => {
+      const color = document.getElementById('color').value;
+      parent.postMessage({ pluginMessage: { type: 'create-rectangles', color } }, '*');
+    };
+  </script>
+</body>
+</html>
