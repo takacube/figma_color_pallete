@@ -29,10 +29,8 @@ const createColorPalette = async (msg: PluginMessage, num: number) => {
   const colorHex = !msg.color.includes("#") ? "#" + msg.color : msg.color;
     const colorRgb = hexToRgb(colorHex);
 
-    // フォントをロード
     await figma.loadFontAsync({ family: "Roboto", style: "Regular" });
 
-    // 上側の色付き部分
     const topRect = figma.createRectangle();
 
     topRect.resize(100, 60);
@@ -40,48 +38,32 @@ const createColorPalette = async (msg: PluginMessage, num: number) => {
     topRect.fills = [{ type: 'SOLID', color: colorRgb }];
     topRect.y = 0;
 
-    // 下側の白色部分
     const bottomRect = figma.createRectangle();
     bottomRect.resize(100, 40);
     bottomRect.cornerRadius = 4;
     bottomRect.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
     bottomRect.y = 60;
-    // テキストレイヤーの作成
     
     const text = figma.createText()
-    // Move to (50, 50)
     text.x = 50
-    //text.y = 50
-    // Load the font in the text node before setting the characters
     if (typeof text.fontName !== 'symbol') {
       await figma.loadFontAsync(text.fontName);
     }
-    //hex color to character
     text.characters = colorHex;
 
-    // Set bigger font size and red color
     text.fontSize = 12
     text.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }]
     text.textAlignHorizontal = 'CENTER'
     text.textAlignVertical = 'CENTER'
-    // set the text to the center of the bottomRect
     text.y = 60 + (40 - text.height) / 2;
 
-    
-    
     const frame = figma.createFrame();
     frame.resize(100, 100);
     frame.cornerRadius = 4;
     frame.layoutMode = 'NONE';
-    // 上下に配置するために位置を設定
-
-    // フレームに矩形とテキストを追加
     frame.appendChild(topRect);
     frame.appendChild(bottomRect);
     frame.appendChild(text);
-
-    // 生成されたオブジェクトの位置を指定
-    // numによって位置をずらす (横に+10pxでいい)
     
     frame.x = figma.viewport.center.x - 50 + num * 110;
     frame.y = figma.viewport.center.y - 50;
